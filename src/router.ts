@@ -13,7 +13,7 @@ export const router = createRouter({
     history:history,
     routes:[
         {path:'/',component:Home},
-        {path:'/doc',component:Line,children:[
+        {path:'/doc',component:Doc,children:[
             {path:'switch',component:Switch},
             {path:'button',component:Button},
             {path:'dialog',component:Dialog},

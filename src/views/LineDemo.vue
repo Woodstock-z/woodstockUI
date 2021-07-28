@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- <Line :data="data"></Line> -->
+    <Line :data="data"></Line>
     <Bar :data="data"></Bar>
   </div>
 </template>
