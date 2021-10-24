@@ -1,7 +1,10 @@
 <template>
   <div>
-    <Line :data="data"></Line>
-    <Bar :data="data"></Bar>
+    <Line :data="data" ></Line>
+    <Line :data="data"  :xAxis="xAxis"></Line>
+    <Line :data="data"  :curve="true" ></Line>
+    <Bar :data="data" :xAxis="xAxis"></Bar>
+    <Bar :data="data" ></Bar>
   </div>
 </template>
 <script>
@@ -13,10 +16,11 @@ export default {
     Bar
   },
   setup(props) {
-    //两个属性 分布对比 性别、成绩分布
-    let data = [150, 230, 80, 160, 224, 218, 135, 147, 151, 260];
+    let data = [150, 230, 224, 218, 135, 147, 300];
+    let xAxis =  ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     return {
       data,
+      xAxis
     };
   },
 };

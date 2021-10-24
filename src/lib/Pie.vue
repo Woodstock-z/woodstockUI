@@ -49,7 +49,7 @@ export default {
         .innerRadius(50)
         .outerRadius(120)
         .cornerRadius(5)
-        .padAngle(0.03);
+        .padAngle(0.02);
       svg
         .append("g")
         .attr("transform", `translate(${props.width / 2},${props.height / 2})`)

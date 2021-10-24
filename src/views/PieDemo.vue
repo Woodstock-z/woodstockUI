@@ -12,7 +12,6 @@ export default {
     setup(props) {
         //两个属性 分布对比 性别、成绩分布
         let data = [
-            {"value":1,"label":"1"},
             {"value":2,"label":"1"},
             {"value":3,"label":"1"},
             {"value":5,"label":"1"},

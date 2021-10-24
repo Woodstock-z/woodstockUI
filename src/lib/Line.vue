@@ -7,35 +7,33 @@ import { onMounted, ref } from "vue";
 export default {
   props: {
     width: {
+      //图表宽度
       type: Number,
       default: 500,
     },
     height: {
+      //图表高度
       type: Number,
       default: 300,
     },
     data: {
+      //数据
       type: Array,
       default: [],
     },
-    colors: {
+    xAxis: {
+      //x轴标签
       type: Array,
-      default: [
-        "#1f77b4",
-        "#ff7f0e",
-        "#2ca02c",
-        "#d62728",
-        "#9467bd",
-        "#e377c2",
-        "#7f7f7f",
-        "#bcbd22",
-        "#17becf",
-      ],
+      default: undefined,
     },
+    curve:{
+      //平滑
+      typeof:Boolean,
+      default:false
+    }
   },
   setup(props, context) {
     const container = ref<HTMLDivElement>(null);
-    let num: number = 1;
     onMounted(() => {
       container.value.style.width = props.width + "px";
       container.value.style.height = props.height + "px";
@@ -47,37 +45,55 @@ export default {
       //@ts-ignore
       let maxValue = Math.max(...props.data);
       let data = props.data.map((d, i) => {
-        return { value: d, index: i };
+        return { value: d, index: i, text:i};
       });
+      if(props.xAxis){
+        data.forEach((d,i)=>{
+          //@ts-ignore
+          d.text = props.xAxis[i];
+        })
+      }
       const y = d3
         .scaleLinear()
         .domain([0, maxValue])
-        .range([props.height - 50, 50]);
+        .range([props.height - 30, 40]);
       const x = d3
         .scaleLinear()
         .domain([0, props.data.length - 1])
-        .range([50, props.width - 50]);
+        .range([30, props.width - 30]);
       const line = d3
         .line()
         .x((d) => x(d.index))
         .y((d) => y(d.value));
+      if(props.curve==true){
+         line.curve(d3.curveCardinal)
+      }
       svg
         .append("g")
         .append("path")
         .attr("d", line(data))
         .attr("fill", "none")
-        .attr("stroke", "black");
+        .attr("stroke", "#409EFF");
+      svg.append("g")
+        .selectAll("circle")
+        .data(data)
+        .enter()
+        .append("circle")
+        .attr("cx",d=>x(d.index))
+        .attr("cy",d=>y(d.value))
+        .attr("r",3)
+        .attr("stroke","#409EFF")
+        .attr("fill","white");
       //坐标轴
-      let axisX = d3.axisBottom(x);
+      let axisX = d3.axisBottom(x).ticks(5).tickFormat((d,i)=>{
+        return data[i].text;
+      })
       svg
         .append("g")
-        .attr("transform", `translate(0,${props.height - 50})`)
+        .attr("transform", `translate(0,${props.height - 30})`)
         .call(axisX);
-      let axisY = d3.axisLeft(y);
-      svg
-        .append("g")
-        .attr("transform", `translate(50,0)`)
-        .call(axisY);
+      let axisY = d3.axisLeft(y).ticks(5);
+      svg.append("g").attr("transform", `translate(30,0)`).call(axisY);
     });
     return {
       container,
@@ -87,8 +103,6 @@ export default {
 </script>
 <style lang="scss">
 .wst-line {
-  width: 500px;
-  height: 300px;
-  border: 1px solid salmon;
+  // border: 1px solid salmon;
 }
 </style>
